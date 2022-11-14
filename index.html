@@ -4,46 +4,55 @@
     <meta name="viewport" content="width=240,initial-scale=1.0" />
     <meta http-equiv="text/html,charset=utf-8" />
     <title></title>
-    <style>
-        html,
-        body {
-            margin: 0;
-            min-width: 100%;
-            min-height: 100%;
-            overflow: hidden;
-        }
-
-        img.background {
-            z-index: -10;
-            object-fit: cover;
-        }
-
-        div.background {
-            background: linear-gradient(to top, rgba(217, 175, 217, 0.7) 0%, rgba(151, 217, 225, 0.7));
-            z-index: -5;
-        }
-
-        .background {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        div.foreground {
-            width: 100%;
-            height: 100%;
-            overflow-y: scroll;
-            z-index: 1;
-        }
-    </style>
+    <script>
+        /** 
+         * ブラウザなどの場合、基本外部アクセスをjsでする際は少々特殊なため
+         * このように埋め込みをすることを推奨
+         * node.jsなどで処理をするならばfsを使用する
+         * 本気でシステムを作るなら相談
+         */
+        const json = {
+            aoki: {
+                name: "aoki",
+                no: 1234,
+                money: 10
+            },
+            ito: {
+                name: "ito",
+                no: 2345,
+                money: 2000
+            }
+        };
+        addEventListener("load", () => {
+            // buttonのidがついたオブジェクトを取得し、イベントリスナー「click」を使用して押されると実行されるようにする
+            document.getElementById("button").addEventListener("click", () => {
+                // textのidがついたオブジェクト取得、そして内容を取得
+                const number = document.getElementById("text").value;
+                // outputのidがつ(ry そしてそこに出力
+                document.getElementById("output").innerHTML = number;
+                // jsonの中にあるオブジェクトだけforを実行(Object.keysを使うとname:valueだとしてnameを取得出来て、そのnameはオブジェクトの数だけ変化するからlengthを使って数を取得できる)
+                for (let i = 0; Object.keys(json).length != i; i++) {
+                    /** 
+                     * さっき説明したObject.keysでは[1]などの数字を入れることで特定のデータを抽出できる。
+                     * そしてさらにjson["aoki"]などの文字列を使用することによってjson内のデータにアクセスが出来る。
+                     * よって、Object.keysで出力された文字列をjsonに送り、その中にあるデータにアクセスすることが可能。
+                     */
+                    if (number == json[Object.keys(json)[i]].no) {
+                        // (ry
+                        document.getElementById("msg").innerHTML = json[Object.keys(json)[i]].name;
+                    };
+                };
+            });
+        });
+    </script>
 </head>
 
 <body>
-    <img class="background" src="win-back.jpg">
-    <div class="background"></div>
-    <div class="foreground">
-        <p>ここにhtmlコードを書いていく</p>
-    </div>
+    <label>あなたのクレジットカード番号を入力:<input type="text" id="text" placeholder="0000-0000-0000-0000"></label>
+    <input type="button" id="button" value="Check">
+    <br>
+    <p id="msg"></p>
+    あなたのクレジットカード番号は<div id="output" style="display: inline;"></div>です。
 </body>
 
 </html>
